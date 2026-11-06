@@ -1,0 +1,302 @@
+/* Surface, border and shadow come from SpotlightCard (see CARD_SURFACE). */
+.card {
+  border-radius: var(--radius-lg);
+  padding: 20px 16px;
+}
+
+@media (min-width: 480px) {
+  .card {
+    padding: 28px 24px;
+  }
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 16px;
+  margin-top: 4px;
+  margin-bottom: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 12px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.optional {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.input {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 10px 12px;
+  /* 16px+ stops iOS Safari from zooming on focus. */
+  font: inherit;
+  font-size: 17px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius);
+}
+
+.input::placeholder {
+  color: #6b7a90;
+}
+
+.input:focus {
+  border-color: var(--brand);
+  outline: 2px solid var(--brand);
+  outline-offset: 0;
+}
+
+.inputError {
+  border-color: var(--error);
+}
+
+.prefixWrap {
+  position: relative;
+}
+
+.prefix {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.inputPrefixed {
+  padding-left: 26px;
+}
+
+.textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.error {
+  color: var(--error);
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.hint {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.extrasToggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: var(--tap);
+  margin: 12px 0 4px;
+  padding: 8px 0;
+  background: none;
+  border: none;
+  color: var(--brand);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chev,
+.chevOpen {
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.chevOpen {
+  transform: rotate(90deg);
+}
+
+.extras {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.extras[hidden] {
+  display: none;
+}
+
+.form :global(.btn) {
+  margin-top: 8px;
+}
+
+.fine {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* --- Input method tabs (link / screenshots / manual) --- */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 18px;
+  background: var(--bg-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.tab,
+.tabActive {
+  min-height: 44px;
+  padding: 8px 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tabActive {
+  background: var(--surface);
+  color: var(--brand);
+  box-shadow: 0 1px 2px rgba(15, 27, 51, 0.12);
+}
+
+.tab:focus-visible,
+.tabActive:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+}
+
+.form .extrasToggle,
+.form .extras {
+  margin: 0;
+}
+
+/* --- Notices --- */
+.notice {
+  padding: 14px;
+  background: #eef3fd;
+  border: 1px solid #c7d6f7;
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.noticeActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-top: 12px;
+}
+
+.linkButton {
+  min-height: var(--tap);
+  padding: 0 4px;
+  background: none;
+  border: none;
+  color: var(--brand);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Field we couldn't fill from the listing. */
+.inputNeeded {
+  border-color: var(--brand);
+  background: #f7f9ff;
+}
+
+/* --- Screenshot thumbnails --- */
+.shots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.shot {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-light);
+}
+
+.shotImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.shotRemove {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 4px;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.shotRemove svg {
+  box-sizing: content-box;
+  padding: 4px;
+  background: rgba(15, 27, 51, 0.8);
+  border-radius: 6px;
+}

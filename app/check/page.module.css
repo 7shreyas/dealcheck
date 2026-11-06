@@ -1,0 +1,35 @@
+.main {
+  min-height: 100vh;
+  background: var(--bg-light);
+  padding: 24px 0 48px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.card {
+  margin-top: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px 18px;
+  max-width: 640px;
+}
+
+.h1 {
+  font-size: 26px;
+}
+
+.meta {
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.note {
+  margin: 16px 0;
+}
