@@ -56,6 +56,7 @@ export default function CheckForm() {
   const [values, setValues] = useState(EMPTY);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [showExtras, setShowExtras] = useState(false);
 
   const [link, setLink] = useState("");
@@ -155,7 +156,7 @@ export default function CheckForm() {
     await readListing(form, undefined, "screenshots");
   }
 
-  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const result = validateCheckInput(values);
     if (!result.ok) {
@@ -167,11 +168,23 @@ export default function CheckForm() {
     }
 
     setSubmitting(true);
-    const params = new URLSearchParams();
-    for (const [key, value] of Object.entries(result.value)) {
-      if (value !== undefined && value !== "") params.set(key, String(value));
+    setSubmitError(null);
+    try {
+      const res = await fetch("/api/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(result.value),
+      });
+      const data = (await res.json()) as { id?: string; error?: string; errors?: FieldErrors };
+      if (!res.ok || !data.id) {
+        if (data.errors) setErrors(data.errors);
+        throw new Error(data.error ?? "Something went wrong. Try again.");
+      }
+      router.push(`/check/${data.id}`);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Something went wrong. Try again.");
+      setSubmitting(false);
     }
-    router.push(`/check?${params.toString()}`);
   }
 
   function field(
@@ -465,6 +478,11 @@ export default function CheckForm() {
             </div>
           </div>
 
+          {submitError && (
+            <p className={styles.error} role="alert">
+              {submitError}
+            </p>
+          )}
           <button type="submit" className="btn btn-primary btn-block" disabled={submitting}>
             {submitting ? "Checking…" : "Check this car — free"}
           </button>

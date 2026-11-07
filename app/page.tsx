@@ -1,6 +1,6 @@
-import Link from "next/link";
 import CheckForm from "./components/CheckForm";
 import SpotlightCard from "./components/SpotlightCard";
+import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 import styles from "./page.module.css";
 
 // Keep the sample on the design tokens; the spotlight only adds the light.
@@ -121,20 +121,7 @@ const STEPS = [
 export default function Home() {
   return (
     <>
-      <header className={styles.header}>
-        <div className={`container ${styles.headerInner}`}>
-          <Link href="/" className={styles.wordmark} aria-label="DealCheck home">
-            <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-              <rect width="24" height="24" rx="6" fill="#1D4ED8" />
-              <path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            DealCheck
-          </Link>
-          <a href="#check" className={styles.headerLink}>
-            Check a car
-          </a>
-        </div>
-      </header>
+      <SiteHeader ctaHref="#check" />
 
       <main>
         <section className={styles.hero}>
@@ -205,7 +192,7 @@ export default function Home() {
                 style={SAMPLE_SURFACE}
               >
                 <p className={styles.sampleCar}>2017 Honda Civic EX · 84,000 mi · asking $13,900</p>
-                <p className={styles.sampleVerdict}>Overpriced by about $1,200</p>
+                <p className={styles.sampleVerdict}>Overpriced: about $1,200 above the typical price</p>
                 <div className={styles.sampleRange}>
                   <span className={styles.sampleRangeLabel}>Fair range near 48104</span>
                   <span className={styles.sampleRangeValue}>$11,800 – $13,300</span>
@@ -302,15 +289,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className={styles.footer}>
-        <div className="container">
-          <p className={styles.footerBrand}>DealCheck</p>
-          <p className={styles.footerText}>
-            Not affiliated with Facebook, Meta or Craigslist. Price estimates are guidance, not a guarantee of value.
-          </p>
-          <p className={styles.footerText}>© {new Date().getFullYear()} DealCheck</p>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

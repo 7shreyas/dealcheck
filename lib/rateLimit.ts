@@ -1,25 +1,11 @@
-// Simple fixed-window limiter keyed by IP and UTC day.
-// In-memory: fine for local dev and a single instance. On Vercel each instance
-// keeps its own counts, so move this to Supabase when the free-check limiter
-// (3/day) is built.
+// Per-day limits, counted in the store (Supabase in production, memory in
+// mock mode), so every server instance shares the same counts.
 
-export type Limiter = { hit: (key: string, now?: Date) => boolean };
+import { getStore, type Store } from "./store";
 
-export function createDailyLimiter(limit: number): Limiter {
-  const counts = new Map<string, number>();
-  let day = "";
-  return {
-    hit(key, now = new Date()) {
-      const today = now.toISOString().slice(0, 10);
-      if (today !== day) {
-        counts.clear();
-        day = today;
-      }
-      const n = (counts.get(key) ?? 0) + 1;
-      counts.set(key, n);
-      return n <= limit;
-    },
-  };
+/** Counts one use of `key` today. False once the count is over `limit`. */
+export async function allowDaily(key: string, limit: number, store: Store = getStore(), now = new Date()): Promise<boolean> {
+  return (await store.incrementDaily(key, now.toISOString().slice(0, 10))) <= limit;
 }
 
 export function clientIp(headers: Headers): string {

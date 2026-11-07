@@ -26,6 +26,8 @@ const CHEAP_FACTOR = 0.75;
 
 const SCAM_KEYWORDS: RegExp[] = [
   /\bdeployed\b/,
+  /\bmilitary\b/,
+  /\boverseas\b/,
   /\bshipping\b/,
   /\bescrow\b/,
   /\bgift ?cards?\b/,

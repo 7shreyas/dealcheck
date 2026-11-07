@@ -9,7 +9,8 @@ import {
   regexExtract,
   verifyExtraction,
 } from "../lib/listing/extract";
-import { createDailyLimiter } from "../lib/rateLimit";
+import { allowDaily } from "../lib/rateLimit";
+import { MemoryStore } from "../lib/store";
 
 const NOW = new Date("2026-11-05T12:00:00Z");
 
@@ -259,14 +260,14 @@ describe("extractFromImages", () => {
 });
 
 describe("listing read limiter", () => {
-  it("blocks after the daily limit and resets the next day", () => {
-    const limiter = createDailyLimiter(2);
+  it("blocks after the daily limit and resets the next day", async () => {
+    const store = new MemoryStore();
     const day1 = new Date("2026-11-05T10:00:00Z");
-    expect(limiter.hit("1.2.3.4", day1)).toBe(true);
-    expect(limiter.hit("1.2.3.4", day1)).toBe(true);
-    expect(limiter.hit("1.2.3.4", day1)).toBe(false);
-    expect(limiter.hit("5.6.7.8", day1)).toBe(true);
-    expect(limiter.hit("1.2.3.4", new Date("2026-11-06T00:01:00Z"))).toBe(true);
+    expect(await allowDaily("extract:1.2.3.4", 2, store, day1)).toBe(true);
+    expect(await allowDaily("extract:1.2.3.4", 2, store, day1)).toBe(true);
+    expect(await allowDaily("extract:1.2.3.4", 2, store, day1)).toBe(false);
+    expect(await allowDaily("extract:5.6.7.8", 2, store, day1)).toBe(true);
+    expect(await allowDaily("extract:1.2.3.4", 2, store, new Date("2026-11-06T00:01:00Z"))).toBe(true);
   });
 });
 

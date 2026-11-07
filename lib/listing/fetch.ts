@@ -2,6 +2,7 @@
 // Only allowlisted hosts are fetched (no open proxy / SSRF), every redirect hop
 // is re-checked, and the response is time- and size-capped.
 
+import { isOffline } from "../http";
 import { detectSource, isFetchableSource } from "./source";
 
 const TIMEOUT_MS = 8000;
@@ -27,6 +28,7 @@ async function readCapped(res: Response): Promise<string> {
 }
 
 export async function fetchListingHtml(url: URL, fetchImpl: typeof fetch = fetch): Promise<string> {
+  if (isOffline()) throw new ListingFetchError("Offline mode: listing links aren't fetched");
   let current = url;
   for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
     if (current.protocol !== "https:" || !isFetchableSource(detectSource(current))) {

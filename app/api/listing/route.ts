@@ -8,7 +8,7 @@ import { EXTRACT_LIMIT_PER_DAY } from "@/lib/config";
 import { extractFromImages, extractFromText, type ExtractResult, type ListingImage } from "@/lib/listing/extract";
 import { fetchListingHtml, listingTextFromHtml } from "@/lib/listing/fetch";
 import { detectSource, isFetchableSource, parseListingUrl } from "@/lib/listing/source";
-import { clientIp, createDailyLimiter } from "@/lib/rateLimit";
+import { allowDaily, clientIp } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 
@@ -16,8 +16,6 @@ const MAX_IMAGES = 4;
 const MAX_IMAGE_BYTES = 3_000_000;
 const MAX_TOTAL_BYTES = 4_000_000; // stays under Vercel's 4.5 MB request cap
 const IMAGE_TYPES = new Set<ListingImage["mediaType"]>(["image/jpeg", "image/png", "image/gif", "image/webp"]);
-
-const limiter = createDailyLimiter(EXTRACT_LIMIT_PER_DAY);
 
 type ListingErrorReason =
   | "invalid_url"
@@ -36,7 +34,7 @@ function succeed(result: ExtractResult, source: string) {
 }
 
 export async function POST(req: Request) {
-  if (!limiter.hit(clientIp(req.headers))) {
+  if (!(await allowDaily(`extract:${clientIp(req.headers)}`, EXTRACT_LIMIT_PER_DAY))) {
     return fail("rate_limited", "You've read a lot of listings today. Enter the details by hand, or try again tomorrow.", 429);
   }
 
